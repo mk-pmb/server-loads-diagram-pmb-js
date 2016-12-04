@@ -1,0 +1,37 @@
+{ "name": "server-loads-diagram-pmb",
+  "version": "0.0.1",
+  "description": "Render my server load logfiles as color gradient bar charts.",
+  "keywords": [
+    "diagram",
+    "server load",
+    "system load"
+  ],
+
+  "author": "M.K. (https://github.com/mk-pmb)",
+  "homepage": "https://github.com/mk-pmb/server-loads-diagram-pmb-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mk-pmb/server-loads-diagram-pmb-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mk-pmb/server-loads-diagram-pmb-js/issues"
+  },
+
+  "private": false, "license": "ISC",
+
+  "main": "loadbars.js",
+  "bin": { "plot-server-loads-pmb": "loadbars.sh" },
+  "scripts": {
+    "test": "nodejs test/all.js"
+  },
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+
+  "dependencies": {},
+  "devDependencies": { "equal-pmb": "^0.1.0" },
+
+
+  "npm vs. BOM = Unexpected token": "-*- coding: UTF-8 -*-"
+}

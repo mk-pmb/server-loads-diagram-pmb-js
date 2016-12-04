@@ -1,0 +1,136 @@
+﻿@charset "UTF-8";
+/* -*- coding: UTF-8, tab-width: 2 -*- */
+
+html, body, p { margin: 0px; padding: 0px; }
+
+body { background-color: wheat; }
+
+#loadbars-wrapper {
+  float: left;
+  font-size: 8px;
+  background-color: white;
+}
+
+abbr, var {
+  text-decoration: none;
+  outline-width: 0px;
+  border-width: 0px;
+  font: inherit;
+}
+
+.row {
+  position: relative;
+  border: 0px solid grey;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  padding-left: 30px;
+}
+
+.day .subrow { position: relative; }
+.row .subrow, .row .diag img { width: 720px; }
+.row .diag, .row .diag img { height: 13px; }
+
+.row .diag { padding-top: 2px; }
+
+.day .hours {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 3;
+}
+
+.row .hours .hour {
+  display: block;
+  position: relative;
+  float: left;
+  width: 30px;
+  height: 100%;
+}
+
+.row .hours .hour var {
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 0px;    /* eff. 2px by padding */
+  padding: 1px 3px;
+  border: 0px solid grey;
+  border-right-width: 1px;
+  color: transparent;
+}
+.row .hours .hour[data-h="0"] var { border-left-width: 1px; }
+
+.row .hours .hour:hover { background-color: rgba(255,255,255,0.2); }
+
+.day .date {
+  display: none;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 100%;
+  width: 30px;
+}
+
+.day .date abbr {
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 40%;
+  padding: 1px 3px;
+  overflow: visible;
+  border: 0px solid grey;
+  border-top-width: 2px;
+  border-left-width: 1px;
+}
+.day .date-dd abbr { text-align: right; }
+
+.day[data-weekdayidx="5"] .date-dd,
+.day[data-weekdayidx="6"] .date-dd,
+.day[data-weekdayidx="0"] .date-dd { display: block; }
+
+.day[data-weekdayidx="5"] .date-dd abbr,
+.day[data-weekdayidx="6"] .date-dd abbr { border-color: red; }
+.day[data-weekdayidx="5"] .date-dd abbr { bottom: -2px; }
+.day[data-weekdayidx="6"] .date-dd abbr {
+  margin-top: 1px;
+  border-top-width: 1px;
+  border-top-style: dotted;
+}
+
+
+.day[data-d="1"] .hours .hour var {
+  color: black;
+  height: 8px;
+}
+.day[data-d="1"] .diag { padding-top: 10px; }
+.day[data-d="1"] .date-mmm { display: block; }
+.day[data-d="1"] .date-dd { display: block; top: 8px; }
+.day[data-d="1"] .date-dd abbr { border-top-width: 0px; margin-top: 3px; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.autoscroll { overflow: auto; }
