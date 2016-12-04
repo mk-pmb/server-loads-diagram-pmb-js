@@ -1,5 +1,5 @@
 { "name": "server-loads-diagram-pmb",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Render my server load logfiles as color gradient bar charts.",
   "keywords": [
     "diagram",
