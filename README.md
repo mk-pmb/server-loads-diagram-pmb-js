@@ -26,7 +26,7 @@ probably result file(s): 2010-07-99.diag.html
 render month 2010-08 (shell command: **snip**) …
 probably result file(s): 2010-08-99.diag.html
 
-$ firefox firefox ./2010-07-99.diag.html
+$ firefox ./2010-07-99.diag.html
 ```
   * [ScreenGrab!](screengrab) -> Copy -> Complete Page/Frame.
   * Paste into your favorite image editor.
