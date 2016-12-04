@@ -70,8 +70,8 @@
 
   function tla(list, slot) { return list.substr(slot * 3, 3); }
   // three-letter abbreviations
-  tla.weekdayNames = 'MonTueWedThuFriSatSun',
-  tla.monthNames = 'JanFebMarAprMayJunJulAugSepOctNovDec'
+  tla.weekdayNames = 'MonTueWedThuFriSatSun';
+  tla.monthNames = 'JanFebMarAprMayJunJulAugSepOctNovDec';
 
 
   (function () {

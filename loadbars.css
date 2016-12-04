@@ -3,12 +3,14 @@
 
 html, body, p { margin: 0px; padding: 0px; }
 
-body { background-color: wheat; }
+body { background-color: white; }
 
 #loadbars-wrapper {
   float: left;
   font-size: 8px;
-  background-color: white;
+  border: 100px solid wheat;
+  border-top-width: 0px;
+  border-left-width: 0px;
 }
 
 abbr, var {
@@ -95,6 +97,7 @@ abbr, var {
 .day[data-weekdayidx="5"] .date-dd abbr,
 .day[data-weekdayidx="6"] .date-dd abbr { border-color: red; }
 .day[data-weekdayidx="5"] .date-dd abbr { bottom: -2px; }
+.day[data-weekdayidx="5"]:last-child .date-dd abbr { bottom: 0px; }
 .day[data-weekdayidx="6"] .date-dd abbr {
   margin-top: 1px;
   border-top-width: 1px;
@@ -109,7 +112,11 @@ abbr, var {
 .day[data-d="1"] .diag { padding-top: 10px; }
 .day[data-d="1"] .date-mmm { display: block; }
 .day[data-d="1"] .date-dd { display: block; top: 8px; }
-.day[data-d="1"] .date-dd abbr { border-top-width: 0px; margin-top: 3px; }
+.day[data-d="1"] .date-dd abbr {
+  margin-top: 3px;
+  border-top-width: 0px;
+  border-left-width: 0px;
+}
 
 
 

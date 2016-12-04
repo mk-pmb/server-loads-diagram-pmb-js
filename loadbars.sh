@@ -140,7 +140,7 @@ function loadbars_month_report_html () {
   local LAST_DAY="$(date +%F --date="$YEAR-$MONTH-01 + 33 days")"
   LAST_DAY="$(date +%d --date="${LAST_DAY%-*}-01 - 1 day")"
 
-  [ -n "$SRCFN_TPL" ] || SRCFN_TPL='../../%Y/%F.txt'
+  [ -n "$SRCFN_TPL" ] || SRCFN_TPL='%F.txt'
 
   local MONTH_DATA=
   local DAY_NUM=
@@ -171,11 +171,12 @@ function loadbars_month_report_html () {
   done
   [ "$DATA_DAYS" -ge 1 ] || return 8$(echo "E: no data for entire month" \
     "$YEAR-$MONTH, using log file names like '$DAY_LOG'" >&2)
-  local HTML_DEST="$YEAR-$MONTH.html"
+  local HTML_DEST="$YEAR-$MONTH-99.diag.html"
   sed -rf <(echo '
-    s~\&$year;~'"$YEAR"'~g
-    s~\&$month;~'"$YEAR"'~g
-    / id="days"[ >]/{'"$MONTH_DATA"'}
+    s~\&\$year;~'"$YEAR"'~g
+    s~\&\$month;~'"$YEAR"'~g
+    s~\&\$loadbars-js;~'"${LOADBARS_JS_PATH:-loadbars.js}"'~g
+    / id="loadbars-days"[ >]/{'"$MONTH_DATA"'}
     ') -- "$SELFPATH/loadbars.tmpl.html" >"$HTML_DEST" || return $?
   # echo "done, $DATA_DAYS days with data: $HTML_DEST"
   return 0
