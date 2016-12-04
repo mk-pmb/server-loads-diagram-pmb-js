@@ -40,6 +40,10 @@ Hints
   * You can [remix date ranges][img-ex01-07] from any number of months by
     remixing their data lines in the generated HTML files.
     (You may want to rename them.)
+  * You can set the `LOADBARS_JS_PATH` environment variable to set the path
+    to `loadbars.js` in the generated HTML. The JS will then fix the CSS.
+    If you set the special pseudo-path `//inline`, both files' content
+    will be inserted into the HTML output.
 
 
 

@@ -6,26 +6,69 @@ function loadbars_days () {
   local SELFPATH="$(readlink -m "$BASH_SOURCE"/..)"
   # cd "$SELFPATH" || return $?
 
-  local COLORMAP_FN='scale-colors.svg'
-  local COLORMAP_PXB64="$(img2base64px "$SELFPATH/$COLORMAP_FN" \
-    -crop '100%x1+0+0' | tail -n +2 | tr -d '\n')"
+  local COLORMAP_PXB64=
+  loadbars_check_rebuild_cache || return $?
+
   local COLOR_OVER="$(echo -ne '\x00\x00\x00' | base64)"
-  local COLOR_NULL="$(echo -ne '--|' | base64)"
+  local COLOR_NULL="$(echo -ne '\x55\xAA\xFF' | base64)"
   local BLOCK_DIMS_PX=( 2 2 )
 
   local ARG=
   for ARG in "$@"; do
     case "$ARG" in
+      --recache )
+        rm -- "$SELFPATH"/cache/*.{sed,b64} 2>/dev/null
+        loadbars_check_rebuild_cache || return $?;;
       [0-9][0-9][0-9][0-9] )
-        loadbars_month_report_html "$ARG"; return $?;;
+        loadbars_month_report_html "$ARG" || return $?;;
       *.txt )
-        loadbars_render_one_day "$ARG" "$(basename "$ARG" .txt)".png
-        return $?;;
+        loadbars_render_one_day "$ARG" || return $?;;
       * ) echo "E: unsupported option: $ARG"; return 2;;
     esac
   done
 
   return 0
+}
+
+
+function loadbars_check_rebuild_cache () {
+  local CHCD="$SELFPATH/cache"
+  mkdir -p "$CHCD" || return $?
+
+  local PIPE_RV=
+  local CMAP_FN='scale-colors.svg'
+  local CHCF="$CHCD/colors.b64"
+  if [ ! -s "$CHCF" ]; then
+    "$SELFPATH"/shims/img2base64px.lite.sh "$SELFPATH/$CMAP_FN" \
+      -crop '100%x1+0+0' | tail -n +2 | tr -d '\n' >"$CHCF"
+    PIPE_RV="${PIPESTATUS[*]}"
+    let PIPE_RV="${PIPE_RV// /+}"
+    [ "$PIPE_RV" == 0 ] || return "$PIPE_RV"
+  fi
+  COLORMAP_PXB64="$(cat "$CHCF")"
+
+  CHCF="$CHCD/inline.sed"
+  local SED_CMD=
+  if [ ! -s "$CHCF" ]; then
+    printf '%s\n' \
+      's~^(\s*<)link( id="loadbars-css" type\S+) [^<>]*>~\1style\2>'"$(
+        loadbars_webcode2sed "$SELFPATH/loadbars.css")</style>~" \
+      's~^(\s*<script id="loadbars-js" type\S+*) src="//inline">~\1>'"$(
+        loadbars_webcode2sed "$SELFPATH/loadbars.js")~" \
+        >"$CHCF" || return $?
+  fi
+
+  return 0
+}
+
+
+function loadbars_webcode2sed () {
+  local SRC_FN="$1"; shift
+  local SED_TRIM='s~\s+~ ~g;s~^\s+~~;s~\s+$~~'
+  LANG=C sed -re "$SED_TRIM"'
+    1s~^\xEF\xBB\xBF~~  # strip UTF-8 BOM
+    s~\\|\&~\\&~g
+    \:^/[/*]:d' -- "$SRC_FN" | tr -s '\n ' ' ' | sed -re "$SED_TRIM"
 }
 
 
@@ -38,6 +81,12 @@ function loadbars_ser2hhmm () {
 function loadbars_render_one_day () {
   local SRC_LOG="$1"; shift
   local DEST_FN="$1"; shift
+  if [ -z "$DEST_FN" ]; then
+    DEST_FN="$(basename "$SRC_LOG" .txt)"
+    DEST_FN="${DEST_FN%.log}"
+    DEST_FN="${DEST_FN%.loads}"
+    DEST_FN+=.png
+  fi
   local MEASUREMENTS=()
   readarray -t MEASUREMENTS < <(sed -nre '
     s~^([0-2][0-9]:[0-5][0-9]) \[.*\] 15/5/1:\s*([0-9]+|$\
@@ -177,7 +226,9 @@ function loadbars_month_report_html () {
     s~\&\$month;~'"$YEAR"'~g
     s~\&\$loadbars-js;~'"${LOADBARS_JS_PATH:-loadbars.js}"'~g
     / id="loadbars-days"[ >]/{'"$MONTH_DATA"'}
-    ') -- "$SELFPATH/loadbars.tmpl.html" >"$HTML_DEST" || return $?
+    '
+    [ "$LOADBARS_JS_PATH" == //inline ] && cat "$SELFPATH"/cache/inline.sed
+    ) -- "$SELFPATH/loadbars.tmpl.html" >"$HTML_DEST" || return $?
   # echo "done, $DATA_DAYS days with data: $HTML_DEST"
   return 0
 }

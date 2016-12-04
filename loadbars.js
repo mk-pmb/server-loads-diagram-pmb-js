@@ -46,7 +46,8 @@
     ['div class="subrow hours"',
       ['div class="date date-mmm"', ['abbr title="{mmm} {yyyy}"', '{mmm}'] ],
       ].concat(range(24, 1, tmpl.hour)),
-    ['div class="subrow diag"', ['img src="{imgSrc}">'],
+    ['div class="subrow diag"',
+      ['div class="img-bg"', ['img src="{imgSrc}">'] ],
       ['div class="date date-dd"', ['abbr title="{date}"', '{dd}'] ] ],
     ]);
 
