@@ -10,6 +10,12 @@ Render my server load logfiles as color gradient bar charts.
 ([Screenshots](https://github.com/mk-pmb/server-loads-diagram-pmb-js/tree/screenshots))
 
 
+Currently, only the arrangement and captions are rendered using JavaScript.
+The color bars themselves are rendered with bash and ImageMagick.
+If you'd like to replace that with canvas rendering, PR welcome.
+
+
+
 Usage
 -----
 
