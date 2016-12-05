@@ -33,7 +33,7 @@ abbr, var {
 .row .diag, .row .diag img { height: 13px; }
 
 .row .diag { padding-top: 2px; }
-.row .img-bg { background-color: #55AAFF; }
+.row .img-bg { height: 100%; background-color: #55AAFF; }
 
 .day .hours {
   position: absolute;
