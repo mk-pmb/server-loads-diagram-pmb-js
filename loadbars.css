@@ -31,6 +31,7 @@ abbr, var {
 .day .subrow { position: relative; }
 .row .subrow, .row .diag img { width: 720px; }
 .row .diag, .row .diag img { height: 13px; }
+.row.no-img-data .diag img { visibility: hidden; }
 
 .row .diag { padding-top: 2px; }
 .row .img-bg { height: 100%; background-color: #55AAFF; }

@@ -35,19 +35,7 @@ function loadbars_check_rebuild_cache () {
   local CHCD="$SELFPATH/cache"
   mkdir -p "$CHCD" || return $?
 
-  local PIPE_RV=
-  local CMAP_FN='scale-colors.svg'
-  local CHCF="$CHCD/colors.b64"
-  if [ ! -s "$CHCF" ]; then
-    "$SELFPATH"/shims/img2base64px.lite.sh "$SELFPATH/$CMAP_FN" \
-      -crop '100%x1+0+0' | tail -n +2 | tr -d '\n' >"$CHCF"
-    PIPE_RV="${PIPESTATUS[*]}"
-    let PIPE_RV="${PIPE_RV// /+}"
-    [ "$PIPE_RV" == 0 ] || return "$PIPE_RV"
-  fi
-  COLORMAP_PXB64="$(cat "$CHCF")"
-
-  CHCF="$CHCD/inline.sed"
+  local CHCF="$CHCD/inline.sed"
   local SED_CMD=
   if [ ! -s "$CHCF" ]; then
     printf '%s\n' \
@@ -57,6 +45,15 @@ function loadbars_check_rebuild_cache () {
         loadbars_webcode2sed "$SELFPATH/loadbars.js")~" \
         >"$CHCF" || return $?
   fi
+
+  CHCF="$LOADBARS_COLORS"
+  if [ -z "$CHCF" ]; then
+    CHCF="$CHCD"/colors.b64
+    [ -s "$CHCF" ] || "$SELFPATH"/img2colorscale.sh >"$CHCF" || return $?
+  fi
+  COLORMAP_PXB64="$(cat -- "$CHCF")"
+  [ -n "$COLORMAP_PXB64" ] || return 5$(
+    echo "E: failed to read color map: $CHCF" >&2)
 
   return 0
 }
@@ -95,6 +92,7 @@ function loadbars_render_one_day () {
   local MM_HOUR=
   local MM_SMIN=  # smin = serial minute = minutes since midnight
   local MM_LOAD=
+  local LOAD_FULL="${LOADBARS_FULL_LOAD:-100}"
   local PX_COLOR=
   local DIAG_PREV_SMIN=
   local DIAG_SMIN=0
@@ -140,7 +138,7 @@ function loadbars_render_one_day () {
         -Fe "${MM_HOUR:0:5}=" >&2
       return 3
     fi
-    let PX_COLOR="$MM_LOAD * 4"
+    let PX_COLOR="(($MM_LOAD * 100) / $LOAD_FULL) * 4"
     PX_COLOR="${COLORMAP_PXB64:$PX_COLOR:4}"
     # PX_COLOR="$(loadbars_dec2chr "$MM_LOAD" "$MM_LOAD" "$MM_LOAD" | base64)"
     [ -n "$PX_COLOR" ] || PX_COLOR="$COLOR_OVER"

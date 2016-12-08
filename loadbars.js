@@ -42,7 +42,7 @@
     var data = { h: h, hh: String(100 + h).substr(1, 2) };
     return [tmpl(tmpl.hourOuter, data), ['var', data.hh]];
   };
-  tmpl.day = arr2html(['div class="row day"{allDataAttr}',
+  tmpl.day = arr2html(['div class="row day {imgHas}-img-data"{allDataAttr}',
     ['div class="subrow hours"',
       ['div class="date date-mmm"', ['abbr title="{mmm} {yyyy}"', '{mmm}'] ],
       ].concat(range(24, 1, tmpl.hour)),
@@ -86,7 +86,9 @@
         tla(tla.monthNames, dayta.m - 1),
         tla(tla.weekdayNames, dayta.weekdayIdx),
       ]);
-      dayta.imgSrc = 'data:image/' + dayta.imgFmt + ';base64,' + dayta.imgData;
+      dayta.imgHas = (dayta.imgData ? 'has' : 'no');
+      dayta.imgSrc = 'data:image/' + (dayta.imgData ? (dayta.imgFmt +
+        ';base64,' + dayta.imgData) : 'none,');
       return tmpl(tmpl.day, dayta);
     }
 
